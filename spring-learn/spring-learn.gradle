@@ -1,3 +1,5 @@
+description = "Spring Learn"
+
 dependencies {
     compile(project(":spring-context"))
 }
