@@ -63,8 +63,25 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
 	public AnnotationConfigApplicationContext() {
+		// AnnotatedBeanDefinitionReader调用AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
+		// 添加了相关的后置解析
+		//0 = "org.springframework.context.annotation.internalConfigurationAnnotationProcessor"
+		// 	org.springframework.context.annotation.ConfigurationClassPostProcessor
+
+		//1 = "org.springframework.context.annotation.internalCommonAnnotationProcessor"
+		// 	org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor
+
+		//2 = "org.springframework.context.event.internalEventListenerProcessor"
+		// 	org.springframework.context.event.EventListenerMethodProcessor
+
+		//3 = "org.springframework.context.event.internalEventListenerFactory"
+		// 	org.springframework.context.event.DefaultEventListenerFactory
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+
+		// 扫描@Component JSR-250javax.inject.Named javax.annotation.ManagedBean
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
+
+		// 以上目的就是为了让org.springframework.beans.factory.support.DefaultListableBeanFactory.beanDefinitionMap，添加对应要注入的bean
 	}
 
 	/**
